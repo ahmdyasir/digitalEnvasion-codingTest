@@ -1,0 +1,35 @@
+{
+  "name": "digitalenvasion",
+  "version": "1.0.0",
+  "description": "**Make sure you have Node version >= 5.0 and NPM >= 3**",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "start-server": "node app.js"
+  },
+  "author": "Maximilian Schwarzmüller",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "bee-queue": "^1.4.0",
+    "body-parser": "^1.18.3",
+    "cron": "^1.8.2",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "express-redis-cache": "^1.1.3",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.34",
+    "mongodb": "^3.1.6",
+    "mongoose": "^5.2.17",
+    "mysql2": "^1.6.1",
+    "pug": "^2.0.3",
+    "redis": "^4.0.2",
+    "sequelize": "^5.0.0-beta.11"
+  }
+}

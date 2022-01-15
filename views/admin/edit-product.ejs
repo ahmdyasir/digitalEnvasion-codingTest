@@ -1,0 +1,34 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/user.css">
+</head>
+
+<body>
+   <%- include('../includes/navigation.ejs') %>
+
+    <main>
+        <form class="product-form" action="/admin/<% if (editing) { %>edit-user<% } else { %>add-user<% } %>" method="<% if (editing) { %>POST<% } else { %>POST<% } %>">
+            <div class="form-control">
+                <label for="firstName">First Name</label>
+                <input type="text" name="firstName" id="firstName" value="<% if (editing) { %><%=user.firstName %><% } %>">
+            </div>
+            <div class="form-control">
+                <label for="lastName">Last Name</label>
+                <input type="text" name="lastName" id="lastName" value="<% if (editing) { %><%=user.lastName %><% } %>">
+            </div>
+            <div class="form-control">
+                <label for="birthdayDate">Date of Birth</label>
+                <input type="date" name="birthdayDate" id="birthdayDate" value="<% if (editing) { %><%=date %><% } %>">
+            </div>
+            <div class="form-control">
+                <label for="location">Location</label>
+                <textarea name="location" id="location" rows="5"><% if (editing) { %><%=user.location %><% } %></textarea>
+            </div>
+            <% if (editing) { %>
+                <input type="hidden" value="<%=user._id %>" name="userId">
+            <% } %>
+
+            <button class="btn" type="submit"><% if (editing) { %>Update Product<% } else { %>Add Product<% } %></button>
+        </form>
+    </main>
+<%- include('../includes/end.ejs') %>

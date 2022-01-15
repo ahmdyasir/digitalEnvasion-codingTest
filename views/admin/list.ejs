@@ -1,0 +1,39 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/user.css">
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+
+            <main>
+                <% if (data.length > 0) { %>
+                    <div class="grid">
+                        <% for (let user of data) { %>
+                            <article class="card product-item">
+                                <header class="card__header">
+                                    <h1 class="product__title">
+                                       First Name: <%= user.firstName %>
+                                    </h1>
+                                    <h1 class="product__title">
+                                        Last Name: <%= user.lastName %>
+                                    </h1>
+                                </header>
+                                <div class="card__content">
+                                    <p class="product__description">
+                                        Address: <%= user.location %>
+                                    </p>
+                                    <p class="product__description">
+                                        Date of Birth <%= user.birthdayDate %>
+                                    </p>
+                                </div>
+                                <div class="card__actions">
+                                    <a href="/admin/edit-user/<%= user._id %>?edit=true" class="btn">Edit</a>
+                                </div>
+                            </article>
+                            <% } %>
+                    </div>
+                    <% } else { %>
+                        <h1>No Products Found!</h1>
+                        <% } %>
+            </main>
+            <%- include('../includes/end.ejs') %>
