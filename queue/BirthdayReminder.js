@@ -36,7 +36,7 @@ queue.on("ready", () => {
       console.log(momentTz.tz.guess(data.browser_location))
       const locale = momentTz.tz(data.browser_location).format("HH:mm");
       const full_name = data.firstName + ' ' + data.lastName
-      if(locale =="22:04"){
+      if(locale =="09:00"){
         const pesan = `Hey, ${full_name} it's your birthday`
         userService.sendBroadcast({
          message: pesan
