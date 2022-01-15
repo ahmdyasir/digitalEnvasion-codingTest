@@ -2,22 +2,19 @@ const path = require('path');
 
 const express = require('express');
 
-const adminController = require('../controllers/user');
+const userController = require('../controllers/user');
 const ResponseMiddleware = require('../middlewares/ResponseMiddleware');
 
 const router = express.Router();
 
-// /admin/add-product => GET
-router.get('/add-user', adminController.getAddProduct, ResponseMiddleware);
+router.get('/add-user', userController.getAddUser, ResponseMiddleware);
 
-// /admin/products => GET
-router.get('/', adminController.getUsers, ResponseMiddleware);
+router.get('/', userController.getUsers, ResponseMiddleware);
 
-// /admin/add-product => POST
-router.post('/add-user', adminController.postAddProduct, ResponseMiddleware);
+router.post('/add-user', userController.postAddUser, ResponseMiddleware);
 
-router.get('/edit-user/:userId', adminController.getEditProduct, ResponseMiddleware);
+router.get('/edit-user/:userId', userController.getEditUser, ResponseMiddleware);
 
-router.post('/edit-user', adminController.postEditProduct);
+router.post('/edit-user', userController.postEditUser);
 
 module.exports = router;

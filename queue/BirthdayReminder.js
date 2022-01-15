@@ -1,7 +1,9 @@
-const Config = require("../.config");
+const Config = require("../config");
 const Queue = require("bee-queue");
-const moment = require('moment')
-const momentTz = require('moment-timezone')
+const axios = require("axios");
+const moment = require("moment");
+const userService = require('./../services/UserService')
+const momentTz = require("moment-timezone");
 
 const queue = new Queue("birthday-reminder", {
   redis: Config.getRedis(),
@@ -12,7 +14,6 @@ const queue = new Queue("birthday-reminder", {
   activateDelayedJobs: true,
   removeOnSuccess: true,
   removeOnFailure: true,
-  redisScanCount: 100,
 });
 
 queue.on("error", (err) => {
@@ -23,24 +24,27 @@ queue.on("succeeded", async (job) => {});
 
 queue.on("failed", async (job, err) => {
   console.log(
-    `broadcast customer (${job.data.phone}):: failed with error: ${err.message}`
+    `broadcast birthday message failed with error: ${err.message}`
   );
 });
 
 queue.on("ready", () => {
-  console.log("Broadcast Queue worker ready");
+  console.log("Broadcast Birthday Queue worker ready");
   queue.process(async (job) => {
     try {
       const data = job.data;
-      console.log("processing ", data.phone);
-
-
-      // PancakeService.sendBroadcast({
-      //   senderPhone: Config.getPSTCSPancake().senderPhone,
-      //   customerPhone: data.phone.replace(/^(0|\+62)/g, "62"),
-      //   message: data.message,
-      //   image: data.image
-      // })
+      console.log(momentTz.tz.guess(data.browser_location))
+      const locale = momentTz.tz(data.browser_location).format("HH:mm");
+      const full_name = data.firstName + ' ' + data.lastName
+      if(locale =="22:04"){
+        const pesan = `Hey, ${full_name} it's your birthday`
+        userService.sendBroadcast({
+         message: pesan
+        })
+      }else{
+        
+      }
+     
     } catch (error) {
       console.log(error);
     }

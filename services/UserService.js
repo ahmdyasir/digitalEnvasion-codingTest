@@ -2,6 +2,7 @@ var CronJob = require("cron").CronJob;
 const User = require("../models/user");
 const moment = require("moment");
 const momenttz = require("moment-timezone");
+const https = require('https')
 const { birthdayReminder } = require("../queue/Producers");
 
 exports.all = async () => {
@@ -20,6 +21,30 @@ exports.all = async () => {
     });
 
     return users;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.addUser = async (data) => {
+  try {
+    const places = momenttz.tz.guess(data.birthdayDate)
+    const newUser = await new User({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      birthdayDate: moment().format(data.birthdayDate),
+      location: data.location,
+      browser_location: places,
+    })();
+    newUser
+    .save()
+    .then((result) => {
+      console.log("Created Product");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+    return newUser
   } catch (error) {
     throw error;
   }
@@ -66,7 +91,6 @@ exports.birthdayReminder = (pattern) => {
         var dateObj = new Date();
         var month = dateObj.getUTCMonth() + 1; //months from 1-12
         var day = dateObj.getUTCDate();
-        var year = dateObj.getUTCFullYear();
         const notifications = await User.find({
           $expr: {
             $and: [
@@ -86,4 +110,33 @@ exports.birthdayReminder = (pattern) => {
     true,
     "Asia/Jakarta"
   );
+};
+
+exports.sendBroadcast = async ({  message }) => {
+  try {
+    const pesan = message;
+    const data = JSON.stringify({
+      message: pesan
+  })
+  
+  const options = {
+      hostname: "hookb.in",
+      port: 443,
+      path: "/NOjjzqKqBZse8mNN8bWL",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": data.length
+      }
+  }
+  
+  const req = https.request(options, (res) => {
+      console.log(`status: ${res.statusCode}`);
+  });
+  
+  req.write(data);
+  req.end();
+  } catch (error) {
+    throw error;
+  }
 };

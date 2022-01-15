@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 
 const config = require('./.config')
 const errorController = require('./controllers/error');
-const User = require('./models/user');
 const userService = require('./services/UserService')
 
 const app = express();
@@ -29,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use('/admin', adminRoutes);
+app.use(adminRoutes);
 
 app.use(errorController.get404);
 

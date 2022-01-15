@@ -5,51 +5,51 @@ const moment = require('moment-timezone')
 exports.getUsers = async (req, res, next) => {
   try {
     const data = await userService.all();
-    req.data = res.render("admin/list", {
+    req.data = res.render("user/list", {
       data: data,
       pageTitle: "User List",
-      path: "/admin/",
+      path: "/",
     });
   } catch (error) {
     next(error);
   }
 };
 
-exports.getAddProduct = (req, res, next) => {
-  res.render("admin/edit-product", {
+exports.getAddUser = async (req, res, next) => {
+  await res.render("user/edit-user", {
     pageTitle: "Add User",
-    path: "/admin/add-user",
+    path: "/add-user",
     editing: false,
   });
 };
 
-exports.postAddProduct = (req, res, next) => {
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const birthdayDate = req.body.birthdayDate;
-  const location = req.body.location;
-  // const dateTime = moment(birthdayDate).toDate();
-  const places = moment.tz.guess(birthdayDate)
+exports.postAddUser = async (req, res, next) => {
+  try{
+  const data = req.body
+  const places = moment.tz.guess(data.birthdayDate)
   const product = new User({
-    firstName: firstName,
-    lastName: lastName,
-    birthdayDate: moment().format(birthdayDate),
-    location: location,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    birthdayDate: moment().format(data.birthdayDate),
+    location: data.location,
     browser_location: places,
   });
-  product
+  await product
     .save()
     .then((result) => {
       // console.log(result);
       console.log("Created Product");
-      res.redirect("/admin/add-user");
+      res.redirect("/");
     })
     .catch((err) => {
       console.log(err);
     });
+  } catch (error){
+    throw (error)
+  }
 };
 
-exports.getEditProduct = async (req, res, next) => {
+exports.getEditUser = async (req, res, next) => {
   try {
     const editMode = req.query.edit;
     if (!editMode) {
@@ -57,9 +57,9 @@ exports.getEditProduct = async (req, res, next) => {
     }
     const prodId = req.params.userId;
     const data = await userService.userDetail(prodId);
-    req.data = res.render("admin/edit-product", {
-      pageTitle: "Edit Product",
-      path: "/admin/edit-user",
+    req.data = res.render("user/edit-user", {
+      pageTitle: "Edit User",
+      path: "/edit-user",
       editing: editMode,
       user: data,
       date: moment(new Date(data.birthdayDate)).format("YYYY-MM-DD"),
@@ -69,34 +69,12 @@ exports.getEditProduct = async (req, res, next) => {
   }
 };
 
-// exports.postEditProduct = (req, res, next) => {
-//   const userId = req.body.userId;
-//   const firstName = req.body.firstName;
-//   console.log(firstName)
-//   const lastName = req.body.lastName;
-//   const birthdayDate = req.body.birthdayDate;
-//   const location = req.body.location;
-//   User.findById(userId)
-//     .then(product => {
-//       product.firstName = firstName;
-//       product.lastName = lastName;
-//       product.birthdayDate = birthdayDate;
-//       product.location = location;
-//       return product.save();
-//     })
-//     .then(result => {
-//       console.log('UPDATED PRODUCT!');
-//       res.redirect('/admin/');
-//     })
-//     .catch(err => console.log(err));
-// };
-
-exports.postEditProduct = async (req, res, next) => {
+exports.postEditUser = async (req, res, next) => {
   try{
     const data = req.body
 
     req.data = await userService.updateUser(req.body.userId, {data})
-    return res.redirect('/admin/')
+    return res.redirect('/')
   } catch (error){
     throw error;
   }
