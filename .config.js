@@ -6,7 +6,7 @@ module.exports = {
     port: 6379,
   },
   cron: {
-    birthdayReminder: "* * * * *",
+    birthdayReminder: "0 * * * *",
   },
   hookbin: {
     endpoint: "https://hookb.in/NOjjzqKqBZse8mNN8bWL",
